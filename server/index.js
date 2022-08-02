@@ -44,9 +44,10 @@ app.use('/data', express.static(__dirname + '/data'));
 
 
 
-app.get('/', (req, res) => {
-    res.status(200).send('Hello World!');
-})
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build", "index.html"));
+});
+
 app.get('/getSimResults', db.getSimulationResults)
 app.get('/get_os_util_percent', db.get_os_utilization_percent)
 
