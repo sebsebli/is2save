@@ -1,0 +1,1531 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": 1,
+  "iteration": 1659423635977,
+  "links": [],
+  "liveNow": false,
+  "panels": [
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "align": "auto",
+            "displayMode": "auto",
+            "inspect": false
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "title"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 224
+              }
+            ]
+          }
+        ]
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 25,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true,
+        "sortBy": []
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT title, description FROM experiment  WHERE id = '$LATEST_EXPERIMENT'",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Scenario Details",
+      "type": "table"
+    },
+    {
+      "circleMaxSize": "30",
+      "circleMinSize": 2,
+      "colors": ["#AD0317", "#FADE2A", "#73BF69"],
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "decimals": 0,
+      "esMetric": "Count",
+      "gridPos": {
+        "h": 9,
+        "w": 24,
+        "x": 0,
+        "y": 4
+      },
+      "hideEmpty": true,
+      "hideZero": false,
+      "id": 21,
+      "initialZoom": "10",
+      "locationData": "table",
+      "mapCenter": "Last GeoHash",
+      "mapCenterLatitude": 51.43436104350797,
+      "mapCenterLongitude": 11.947065293024565,
+      "maxDataPoints": 1,
+      "mouseWheelZoom": true,
+      "pluginVersion": "8.4.0-pre",
+      "showLegend": true,
+      "stickyLabels": true,
+      "tableQueryOptions": {
+        "geohashField": "location",
+        "labelField": "name",
+        "latitudeField": "latitude",
+        "longitudeField": "longitude",
+        "metricField": "utilization",
+        "queryType": "coordinates"
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT timestamp as \"time\",\n Round((avg(current_admin* 100/NULLIF(required_admin,0)) +\n    avg(current_easy* 100/NULLIF(required_easy,0))+\n\t  avg(current_medium* 100/NULLIF(required_medium,0))+\n\t    avg(current_heavy* 100/NULLIF(required_heavy,0)))/4,0)\n as utilization,\n name,\n ST_X(ST_Transform ( ST_GeomFromWKB(location), 4326)) AS longitude,\nST_Y(ST_Transform ( ST_GeomFromWKB(location), 4326)) AS latitude\n FROM operating_site_history as os \n  WHERE experiment_id = '$LATEST_EXPERIMENT'\n GROUP BY time, location,name ORDER BY time ",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "thresholds": "30,70",
+      "title": "Einsatzortauslastung",
+      "type": "grafana-worldmap-panel",
+      "unitPlural": "%",
+      "unitSingle": "",
+      "unitSingular": "%",
+      "valueName": "current"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "fixed"
+          },
+          "custom": {
+            "align": "left",
+            "displayMode": "color-text",
+            "inspect": false,
+            "minWidth": 0
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 5,
+        "w": 24,
+        "x": 0,
+        "y": 13
+      },
+      "id": 10,
+      "options": {
+        "footer": {
+          "fields": "",
+          "reducer": ["sum"],
+          "show": false
+        },
+        "showHeader": true
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  name AS \"Bezeichnung\",\n  impact AS \"Impact\",\n  information AS \"Information\",\n  media AS \"Media\",\n  precipitation AS \"Precipitation\",\n  temperature AS \"Temperature\",\n  threat AS \"Threat\",\n  required_admin AS \"Admin\",\n  required_easy AS \"Easy\",\n    required_medium AS \"Medium\",\n  required_heavy AS \"Heavy\"\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY name,impact,information,media,precipitation,threat,temperature,required_admin,required_easy,required_medium,required_heavy\nORDER BY name",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Übersicht Änderungen Events/Einsatzorte",
+      "type": "table"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 18
+      },
+      "id": 27,
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 8,
+        "x": 0,
+        "y": 19
+      },
+      "id": 13,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["$__interval", "none"],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__unixEpochGroupAlias(\"timestamp\",$__interval),\n  avg(totaldaysworked) AS \"Tage (Ø)\",\n  sum(totalhourshelped) AS \"Helferstunden (∑)\",\n  avg(totalhourshelped) / NULLIF(avg(totaldaysworked),0) AS \"Stunden (Ø)\"\nFROM spontaneous_volunteers\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY 1",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["totaldaysworked"],
+                "type": "column"
+              },
+              {
+                "params": ["avg"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["Tage (Ø)"],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": ["totalhourshelped"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["Summe der Stunden"],
+                "type": "alias"
+              }
+            ],
+            [
+              {
+                "params": ["totalhourshelped"],
+                "type": "column"
+              },
+              {
+                "params": ["avg"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["Stunden (Ø)"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "spontaneous_volunteers",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Übersicht Helfende",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 4,
+        "x": 8,
+        "y": 19
+      },
+      "id": 31,
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["mean"],
+          "fields": "/^totalnumberofrejects$/",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "select totalnumberofrejects, timestamp as time\nfrom spontaneous_volunteers\nwhere experiment_id = '$LATEST_EXPERIMENT'\ngroup by time,totalnumberofrejects",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Zurückweisungen (Ø)",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "custom": {
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 19
+      },
+      "id": 23,
+      "options": {
+        "basemap": {
+          "config": {},
+          "name": "Layer 0",
+          "type": "osm-standard"
+        },
+        "controls": {
+          "mouseWheelZoom": true,
+          "showAttribution": true,
+          "showDebug": false,
+          "showScale": false,
+          "showZoom": true
+        },
+        "layers": [
+          {
+            "config": {
+              "blur": 45,
+              "radius": 7,
+              "weight": {
+                "field": "id",
+                "fixed": 1,
+                "max": 1,
+                "min": 0
+              }
+            },
+            "location": {
+              "mode": "auto"
+            },
+            "name": "Layer 3",
+            "type": "heatmap"
+          }
+        ],
+        "tooltip": {
+          "mode": "details"
+        },
+        "view": {
+          "id": "fit",
+          "lat": 51.477255,
+          "lon": 11.9268,
+          "zoom": 10
+        }
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [],
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": " SELECT timestamp as \"time\", \n id,\n ST_X(ST_Transform ( ST_GeomFromWKB(current_location), 4326)) AS \"Longitude\",\nST_Y(ST_Transform ( ST_GeomFromWKB(current_location), 4326)) AS \"Latitude\"\n FROM spontaneous_volunteers as sv \n WHERE experiment_id = '$LATEST_EXPERIMENT'\n GROUP BY timestamp,current_location,id ORDER BY timestamp desc LIMIT 20000",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            },
+            {
+              "name": "",
+              "params": ["id", "=", "'$LATEST_EXPERIMENT'"],
+              "type": "expression"
+            }
+          ]
+        }
+      ],
+      "title": "Spontanhelferbewegungen",
+      "type": "geomap"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 28
+      },
+      "id": 15,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 19,
+        "x": 0,
+        "y": 29
+      },
+      "id": 5,
+      "maxDataPoints": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right"
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["\"timestamp\""],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "\nSELECT\n  timestamp as time,\n  name as metric,\n  Round((avg(current_admin* 100/NULLIF(required_admin,0)) +\n    avg(current_easy* 100/NULLIF(required_easy,0))+\n\t  avg(current_medium* 100/NULLIF(required_medium,0))+\n\t    avg(current_heavy* 100/NULLIF(required_heavy,0)))/4,0)\n\t\t\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY time, name\nORDER BY time",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_easy"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_easy"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Durchschnittliche Auslastung aller Einsatzorte (in %)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red"
+              },
+              {
+                "color": "#EAB839",
+                "value": 20
+              },
+              {
+                "color": "green",
+                "value": 50
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 5,
+        "x": 19,
+        "y": 29
+      },
+      "id": 29,
+      "options": {
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": ["allValues"],
+          "fields": "",
+          "values": true
+        },
+        "showUnfilled": true
+      },
+      "pluginVersion": "9.0.2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "table",
+          "group": [],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  ROUND((avg(current_admin* 100/NULLIF(required_admin,0)) +\n    avg(current_easy* 100/NULLIF(required_easy,0))+\n\t  avg(current_medium* 100/NULLIF(required_medium,0))+\n\t    avg(current_heavy* 100/NULLIF(required_heavy,0)))/4,0)\n\t\t,\nCASE WHEN TO_TIMESTAMP(timestamp / 1000)::time <  '06:00' THEN 'Nacht'\n            WHEN TO_TIMESTAMP(timestamp / 1000)::time >= '22:00' THEN 'Nacht'\n            ELSE 'Tag' END AS daytime\nFROM  operating_site_history\nWHERE experiment_id =  '$LATEST_EXPERIMENT'\nGroup by daytime\n",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": [
+            {
+              "name": "$__unixEpochFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        },
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "table",
+          "group": [],
+          "hide": false,
+          "metricColumn": "none",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  ROUND((avg(current_admin* 100/NULLIF(required_admin,0)) +\n    avg(current_easy* 100/NULLIF(required_easy,0))+\n\t  avg(current_medium* 100/NULLIF(required_medium,0))+\n\t    avg(current_heavy* 100/NULLIF(required_heavy,0)))/4,0) as \"Gesamt\"\n\nFROM  operating_site_history\nWHERE experiment_id =  '$LATEST_EXPERIMENT'\n\n",
+          "refId": "B",
+          "select": [
+            [
+              {
+                "params": ["value"],
+                "type": "column"
+              }
+            ]
+          ],
+          "timeColumn": "time",
+          "where": [
+            {
+              "name": "$__timeFilter",
+              "params": [],
+              "type": "macro"
+            }
+          ]
+        }
+      ],
+      "title": "Durchschnittliche Auslastung der Einsatzorte",
+      "type": "bargauge"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "axisSoftMax": 20,
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 50,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "light-green"
+              },
+              {
+                "color": "semi-dark-red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 24,
+        "x": 0,
+        "y": 37
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["$__interval", "none"],
+              "type": "time"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__unixEpochGroupAlias(\"timestamp\",$__interval),\n  name AS metric,\n  sum(current_rejects) AS \"current_rejects\"\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY 1,2\nORDER BY 1,2",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_rejects"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_rejects"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Absolute Anzahl an Zurückweisungen an Einsatzorten",
+      "type": "timeseries"
+    },
+    {
+      "collapsed": false,
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 41
+      },
+      "id": 17,
+      "panels": [],
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "refId": "A"
+        }
+      ],
+      "title": "Row title",
+      "type": "row"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 42
+      },
+      "id": 2,
+      "maxDataPoints": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["\"timestamp\""],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "\nSELECT\n  timestamp as time,\n  name as metric,\n  avg(current_easy* 100/NULLIF(required_easy,0))\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY time, name\nORDER BY time",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_easy"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_easy"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Auslastung für Easy-Tasks (in %)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 42
+      },
+      "id": 11,
+      "maxDataPoints": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "8.4.0-pre",
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["\"timestamp\""],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "\nSELECT\n  timestamp as time,\n  name as metric,\n  avg(current_admin* 100/NULLIF(required_admin,0))\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY time, name\nORDER BY time",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_easy"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_easy"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Auslastung für Admin-Tasks (in %)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 0,
+        "y": 51
+      },
+      "id": 3,
+      "maxDataPoints": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["\"timestamp\""],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "\nSELECT\n  timestamp as time,\n  name as metric,\n  avg(current_medium* 100/NULLIF(required_medium,0))\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY time, name\nORDER BY time",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_easy"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_easy"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Auslastung für Medium-Tasks (in %)",
+      "transformations": [],
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "postgres",
+        "uid": "mbyJRRJnk"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green"
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 9,
+        "w": 12,
+        "x": 12,
+        "y": 51
+      },
+      "id": 6,
+      "maxDataPoints": 1,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "mbyJRRJnk"
+          },
+          "format": "time_series",
+          "group": [
+            {
+              "params": ["\"timestamp\""],
+              "type": "column"
+            }
+          ],
+          "metricColumn": "name",
+          "rawQuery": true,
+          "rawSql": "\nSELECT\n  timestamp as time,\n  name as metric,\n  avg(current_heavy* 100/NULLIF(required_heavy,0))\nFROM operating_site_history\n WHERE experiment_id = '$LATEST_EXPERIMENT'\nGROUP BY time, name\nORDER BY time",
+          "refId": "A",
+          "select": [
+            [
+              {
+                "params": ["current_easy"],
+                "type": "column"
+              },
+              {
+                "params": ["sum"],
+                "type": "aggregate"
+              },
+              {
+                "params": ["current_easy"],
+                "type": "alias"
+              }
+            ]
+          ],
+          "table": "operating_site_history",
+          "timeColumn": "\"timestamp\"",
+          "timeColumnType": "float8",
+          "where": []
+        }
+      ],
+      "title": "Auslastung für Heavy-Tasks (in %)",
+      "transformations": [],
+      "type": "timeseries"
+    }
+  ],
+  "refresh": "5s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": [],
+  "templating": {
+    "list": [
+      {
+        "current": {
+          "selected": false,
+          "text": "14",
+          "value": "14"
+        },
+        "datasource": {
+          "type": "postgres",
+          "uid": "mbyJRRJnk"
+        },
+        "definition": "SELECT ID FROM experiment",
+        "hide": 0,
+        "includeAll": false,
+        "label": "Auswahl Experiment",
+        "multi": false,
+        "name": "LATEST_EXPERIMENT",
+        "options": [],
+        "query": "SELECT ID FROM experiment",
+        "refresh": 1,
+        "regex": "",
+        "skipUrlSync": false,
+        "sort": 4,
+        "type": "query"
+      }
+    ]
+  },
+  "time": {
+    "from": "2022-07-03T19:20:12.193Z",
+    "to": "2022-07-18T08:36:11.675Z"
+  },
+  "timepicker": {},
+  "timezone": "",
+  "title": "ISS2SaVe Dashboard",
+  "uid": "zZR1jUA7z",
+  "version": 88,
+  "weekStart": ""
+}

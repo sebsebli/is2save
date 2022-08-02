@@ -1,0 +1,483 @@
+{
+    "$id": "SVCSDL",
+    "title": "DSS2Save Scenario Editor",
+    "description": "Edit the scenario that you want to simulate in DSS2SaVe",
+    "type": "object",
+    "required": [
+        "id",
+        "title",
+        "description",
+        "duration",
+        "disasterType",
+        "populations",
+        "events"
+    ],
+    "properties": {
+        "id": {
+            "type": "string",
+            "title": "Unique identifier for the scenario",
+            "minLength": 2
+        },
+        "title": {
+            "type": "string",
+            "title": "Scenario title",
+            "description": "The scenario title will be used to easily identify a certain scenario",
+            "default": "2021 Century of the flood",
+            "minLength": 2,
+            "maxLength": 40
+        },
+        "description": {
+            "type": "string",
+            "title": "A short decription of your scenario",
+            "description": "Describe the scenario to enable third parties to understand it",
+            "default": "This scenario happens in the City of Halle (Saale). 2,000 volunteers arrive at 8 operating sites within 3 days",
+            "minLength": 2,
+            "maxLength": 250
+        },
+     
+        "duration": {
+            "type": "object",
+            "title": "The duration of the disaster",
+            "description": "Describes the start and end of the disaster",
+            "required": [
+                "startDate",
+                "endDate"
+            ],
+            "properties": {
+                "startDate": {
+                    "$ref": "#/definitions/datetime",
+                    "title": "Start of scenario"
+                },
+                "endDate": {
+                    "$ref": "#/definitions/datetime",
+                    "title": "End of scenario"
+                }
+            }
+        },
+        "disasterType": {
+            "type": "string",
+            "title": "Disaster type",
+            "default": "flood",
+            "enum": [
+                "flood"
+            ]
+        },
+        "populations": {
+            "type": "array",
+            "title": "Spontaneous Volunteer Populations",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/definitions/population"
+            }
+        },
+        "events": {
+            "type": "array",
+            "title": "Events in the scenario",
+            "minItems": 1,
+            "items": {
+                "$ref": "#/definitions/event"
+            }
+        }
+    },
+    "definitions": {
+        "geoPoint": {
+            "title": "GeoJSON Point",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Point"
+                    ]
+                },
+                "coordinates": {
+                    "type": "array",
+                    "minItems": 2,
+                    "items": {
+                        "type": "number"
+                    }
+                },
+                "bbox": {
+                    "type": "array",
+                    "minItems": 4,
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "geoPolygon": {
+            "title": "GeoJSON Polygon",
+            "type": "object",
+            "required": [
+                "type",
+                "coordinates"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "enum": [
+                        "Polygon"
+                    ]
+                },
+                "coordinates": {
+                    "type": "array",
+                    "items": {
+                        "type": "array",
+                        "minItems": 4,
+                        "items": {
+                            "type": "array",
+                            "minItems": 2,
+                            "items": {
+                                "type": "number"
+                            }
+                        }
+                    }
+                },
+                "bbox": {
+                    "type": "array",
+                    "minItems": 4,
+                    "items": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "datetime": {
+            "type": "string",
+            "format": "date-time",
+            "default": "2021-10-01T11:20:00.000Z"
+        },
+        "distribution": {
+            "type": "object",
+            "description": "Represents a triangular distribution of certain values whereas min = minimum, mod = mode, max = maximum",
+            "required": [
+                "min",
+                "mod",
+                "max"
+            ],
+            "properties": {
+                "min": {
+                    "title": "Min",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "mod": {
+                    "title": "Mod",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                },
+                "max": {
+                    "title": "Max",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 100
+                }
+            }
+        },
+        "requiredVolunteers": {
+            "type": "object",
+            "required": [
+                "admin",
+                "easy",
+                "medium",
+                "heavy"
+            ],
+            "properties": {
+                "admin": {
+                    "title": "Admin tasks",
+                    "description": "e.g. documenting, situation monitoring, counting people",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                },
+                "easy": {
+                    "title": "Easy tasks",
+                    "description": "e.g. carrying things, providing food and water",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                },
+                "medium": {
+                    "title": "Medium tasks",
+                    "description": "e.g. filling sandbags",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                },
+                "heavy": {
+                    "title": "Heavy tasks",
+                    "description": "e.g. carrying sandbags",
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 50000
+                }
+            }
+        },
+        "operatingSite": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "impact",
+                "risk",
+                "mediaCoverage",
+                "information",
+                "location",
+                "requiredVolunteers"
+            ],
+            "properties": {
+                "id": {
+                    "title": "ID",
+                    "type": "integer",
+                    "description": "Each operating site needs a unique ID. It is required to reference existing operating sites during simulation runs.",
+                    "minimum": 0,
+                    "default": 0
+                },
+                "name": {
+                    "title": "Name",
+                    "type": "string",
+                    "default": "Operating Site Market Place",
+                    "minLength": 1,
+                    "maxLength": 40
+                },
+                "location": {
+                    "title": "Location",
+                    "$ref": "#/definitions/geoPoint"
+                },
+                "impact": {
+                    "type": "number",
+                    "title": "Impact",
+                    "description": "1 = low, 2 = medium, 3 = severe",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "risk": {
+                    "type": "number",
+                    "title": "Risk",
+                    "description": "1 = none, 2 = low, 3 = strong",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "mediaCoverage": {
+                    "type": "number",
+                    "title": "Media Coverage",
+                    "description": "1 = none, 2 = low, 3 = strong",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "information": {
+                    "type": "number",
+                    "title": "Information",
+                    "description": "1 = none, 2 = few, 3 = full.",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "requiredVolunteers": {
+                    "$ref": "#/definitions/requiredVolunteers",
+                    "title": "Number of required volunteers"
+                }
+            }
+        },
+        "event": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "description",
+                "datetime",
+                "temperature",
+                "precipitation",
+                "operatingSites"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "title": "ID",
+                    "minimum": 0,
+                    "default": 0
+                },
+                "name": {
+                    "type": "string",
+                    "title": "Event name",
+                    "default": "New event",
+                    "minLength": 2,
+                    "maxLength": 40
+                },
+                "description": {
+                    "type": "string",
+                    "title": "A short decription of the event",
+                    "description": "Describe the event to enable third parties to understand it.",
+                    "minLength": 1,
+                    "maxLength": 250
+                },
+                "datetime": {
+                    "title": "Date and time of Event",
+                    "$ref": "#/definitions/datetime"
+                    
+                },
+                "temperature": {
+                    "type": "number",
+                    "description": "1 = hot, 2 = moderate, 3 = cold.",
+                    "title": "Temperature",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "precipitation": {
+                    "type": "number",
+                    "description": "1 = none, 2 = low, 3 = strong",
+                    "title": "Precipitation",
+                    "enum": [
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                "operatingSites": {
+                    "title": "Operating Sites",
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/operatingSite"
+                    }
+                }
+            }
+        },
+        "population": {
+            "type": "object",
+            "required": [
+                "id",
+                "name",
+                "number",
+                "region",
+                "fitnessDistribution",
+                "friendsDistribution",
+                "helpTimeDistribution",
+                "helpDurationDistribution",
+                "acceptableRejectsDayDistribution",
+                "acceptableRejectsGeneralDistribution",
+                "restingDurationDistribution"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "title": "Population id",
+                    "default": 0,
+                    "minimum": 0
+                },
+                "name": {
+                    "type": "string",
+                    "title": "Population name",
+                    "default": "City center",
+                    "minLength": 2,
+                    "maxLength": 20
+                },
+                "number": {
+                    "type": "integer",
+                    "title": "Population size",
+                    "description": "The population size desribes the number of potential spontaneous volunteers in a certain area. It does not represent the whole population!",
+                    "default": 2000,
+                    "minimum": 1,
+                    "maximum": 50000
+                },
+                "region": {
+                    "$ref": "#/definitions/geoPolygon",
+                    "title": "The region of the population",
+                    "description": "This defines the region in which the spontaneous volunteers will be distributed in the experiment."
+                },
+                "fitnessDistribution": {
+                    "title": "Individual fitness distribution",
+                    "description": "The percentage of people that are physically able to fulfill certain tasks.",
+                    "type": "object",
+                    "required": [
+                        "admin",
+                        "easy",
+                        "medium",
+                        "heavy"
+                    ],
+                    "properties": {
+                        "admin": {
+                            "title": "Administrative Tasks",
+                            "description": "e.g. documenting, situation monitoring, counting people",
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 100
+                        },
+                        "easy": {
+                            "title": "Easy Tasks",
+                            "description": "e.g. carrying things, providing food and water",
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 100
+                        },
+                        "medium": {
+                            "title": "Medium Tasks",
+                            "description": "e.g. filling sandbags",
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 100
+                        },
+                        "heavy": {
+                            "title": "Heavy Tasks",
+                            "description": "e.g. carrying sandbags",
+                            "type": "integer",
+                            "minimum": 0,
+                            "maximum": 100
+                        }
+                    }
+                },
+                "friendsDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Number of friends distribution",
+                    "description": "Describes the number of friends each volunteer can have."
+                },
+                "helpTimeDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Hours of help per day",
+                    "description": "The number of hours per day that a spontaneous volunteer is helping at an operating site before resting at home."
+                },
+                "helpDurationDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Days of help in scenario",
+                    "description": "The number of days that a spontaneous volunteer is willing to help if not aborted due to other reasons."
+                },
+                "restingDurationDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Resting duration",
+                    "description": "The number of hours that a spontaneous volunteer is resting at home before he potentially starts new helping activities."
+                },
+                "acceptableRejectsDayDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Number of acceptable rejects (day)",
+                    "description": "The number of rejects a day after that a spontaneous volunteer is not willling to help anymore."
+                },
+                "acceptableRejectsGeneralDistribution": {
+                    "$ref": "#/definitions/distribution",
+                    "title": "Number of acceptable rejects (scenario)",
+                    "description": "The number of rejects in a scenario after that a spontaneous volunteer stops all helping activities."
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "date-and-time": "^2.1.0",
+    "express": "^4.17.1",
+    "geojson-precision": "^1.0.0",
+    "lodash": "^4.17.21",
+    "node-fetch": "^3.1.0",
+    "path": "^0.12.7",
+    "pg": "^8.7.1",
+    "pg-promise": "^10.11.1",
+    "puppeteer": "^15.4.0",
+    "random-color-array-generator": "^1.0.3",
+    "randomcolor": "^0.6.2"
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
