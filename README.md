@@ -11,6 +11,8 @@ This is a git lfs project. Make sure you have git lfs installed.
 
 ## Getting started
 
+Load the `grafana-dashboard.json` in Grafana
+
 Start AnyLogic & load `DSS2SaVe.original.alp`
 
 In AnyLogic: open the .. and change the database credentials according to your configuration
