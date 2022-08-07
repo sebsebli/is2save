@@ -177,8 +177,11 @@ const get_latest_experiment = (request, response) => {
             response.status(400)
             throw err
         }
-        response.status(200).json(res.rows[0].id)
-
+        if (res.rows[0]) {
+            response.status(200).json(res.rows[0].id)
+        } else {
+            response.status(400)
+        }
     })
 
 }

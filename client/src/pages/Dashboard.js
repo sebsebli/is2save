@@ -79,7 +79,8 @@ function Dashboard() {
     const getLatestExperiment = async () => {
         try {
             const response = await fetch(
-                'http://localhost:2020/latestExperiment'
+                'http://localhost:2020/latestExperiment',
+                { signal: AbortSignal.timeout(5000) }
             );
             let latest = await response.json();
 
@@ -87,21 +88,42 @@ function Dashboard() {
             if (response.status == 200) {
                 console.log("LATEST ", latest)
                 setLatestScen(latest)
-
             }
-        } catch (err) {
-            toast.error(err, {
-                position: "top-center",
-                autoClose: 15000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
-            setLatestScen(null)
-            setError(true)
 
+
+
+
+        } catch (err) {
+            if (err.name === "TimeoutError") {
+                toast.error("No experiment found. Reload the page.", {
+                    position: "top-center",
+                    autoClose: 15000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setLatestScen(null)
+                setError(true)
+
+            } else {
+
+
+
+
+                toast.error(err, {
+                    position: "top-center",
+                    autoClose: 15000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setLatestScen(null)
+                setError(true)
+            }
 
         }
     }
