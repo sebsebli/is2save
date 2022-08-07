@@ -103,7 +103,7 @@ export default function SimSettings() {
                         value={simulationSettings.savingInterval} fill large id="text-input" min={1} max={60} placeholder="default is 15" />
 
                 </FormGroup>
-                <Divider />
+               {/* <Divider />
                 <FormGroup
                     style={{ margin: 5 }}
                 >
@@ -125,7 +125,7 @@ export default function SimSettings() {
                         value={simulationSettings.predictionThreshold} fill large id="text-input" stepSize={0.01} minorStepSize={0.01} majorStepSize={0.01} min={0.01} max={0.99} placeholder="default is 0.5" />
 
                 </FormGroup>
-
+*/}
                 <Divider />
                 <RadioGroup
                     style={{ margin: 5 }}
@@ -147,25 +147,7 @@ export default function SimSettings() {
                     <Radio label="road approximations" value='1' />
                     <Radio label="straight lines" value='2' />
                 </RadioGroup>
-                <RadioGroup
-                    style={{ margin: 5 }}
-                    inline
-                    selectedValue={simulationSettings.routingMode.toString()}
-                    onChange={(e) => {
-                        updateSimulatinSettings((simulationSettings) => {
-
-                            simulationSettings.routingMode = parseInt(e.currentTarget.value)
-                        })
-
-                    }}
-                >
-                    <H6>MODE</H6>
-
-                    <Radio label="Car" value='0' />
-                    <Radio label="Rail" value='1' />
-                    <Radio label="Walk" value='2' />
-                    <Radio label="Bike" value='3' />
-                </RadioGroup>
+              
                 <Divider />
                 <Button icon="floppy-disk" large fill intent={Intent.PRIMARY} text="SAVE SETTINGS" />
 
