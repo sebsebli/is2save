@@ -45,14 +45,14 @@ function App() {
 
   const currentScenario = localStorage.getItem('dss2save-currentScenario');
   const [saved, setSaved] = useState(true)
-
-  useBeforeunload((event) => {
-    if (!saved) {
-      event.preventDefault();
-      return "Don't forget to save your scenario first!"
-    }
-  });
-
+  /*
+    useBeforeunload((event) => {
+      if (!saved) {
+        event.preventDefault();
+        return "Don't forget to save your scenario first!"
+      }
+    });
+  */
   useEffect(() => {
     if (currentScenario) {
       setScenario(JSON.parse(currentScenario))

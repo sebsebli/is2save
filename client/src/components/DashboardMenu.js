@@ -111,7 +111,8 @@ function DashboardMenu({ update, toggleUpdate, data, printable }) {
                 draggable: true,
                 progress: undefined,
             });
-            navigate('/dashboard')
+            window.location.reload()
+
         } else {
             toast.error('Error generating paths. Try again later.', {
                 position: "top-center",

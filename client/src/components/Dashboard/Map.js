@@ -19,7 +19,7 @@ function MovementMap() {
 
     const map = useRef(null);
 
-    const [zoom, setZoom] = useState(9);
+    const [zoom, setZoom] = useState(11);
     const [showPaths, setShowPaths] = useState(true)
     const [markers, setMarkers] = useState([])
     const [sliderValue, setSliderValue] = React.useState(0);
@@ -141,7 +141,6 @@ function MovementMap() {
 
             // add it to the map
             map.current.addSource('svPoints', { type: 'geojson', data: data });
-            map.current.addSource('osPoints', { type: 'geojson', data: "http://localhost:2020/data/geo_os_by_time.json" });
 
             map.current.addSource('svPaths', { type: 'geojson', data: "http://localhost:2020/data/geo_sv_paths.json" });
 
@@ -158,8 +157,8 @@ function MovementMap() {
                 'visibility': 'none',
                 'paint': {
                     'line-color': '#6e0848',
-                    'line-opacity': 0.8,
-                    'line-width': 0.5
+                    'line-opacity': 0.3,
+                    'line-width': 0.1
                 }
             });
 
@@ -174,18 +173,42 @@ function MovementMap() {
                     'circle-opacity': 1
                 }
             });
-            map.current.addLayer({
-                'id': 'osPoints',
-                type: 'circle',
-                source: 'osPoints',
-                paint: {
-                    'circle-radius': 8,
-                    'circle-color': '#026cb8',
-                    'circle-stroke-color': '#fff',
-                    'circle-stroke-width': 3,
-                    'circle-opacity': 1
+
+
+            map.current.loadImage(
+                'http://localhost:2020/images/flood.png',
+                (error, image) => {
+                    if (error) throw error;
+                    map.current.addImage('custom-marker', image);
+                    // Add a GeoJSON source with 2 points
+                    map.current.addSource('osPoints', { type: 'geojson', data: "http://localhost:2020/data/geo_os_by_time.json" });
+
+
+                    // Add a symbol layer
+                    map.current.addLayer({
+                        'id': 'osPoints',
+                        'type': 'symbol',
+                        'source': 'osPoints',
+                        'layout': {
+                            'icon-image': 'custom-marker',
+                            'icon-size': 0.2,
+                            // get the title name from the source's "title" property
+                            'text-field': ['get', 'description'],
+                            'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
+                            'text-radial-offset': 1,
+                            'text-justify': 'auto',
+                            'text-offset': [0, 5],
+                            'text-anchor': 'top',
+
+                        },
+                        paint: {
+                            "text-color": "#ffffff"
+                        }
+                    });
                 }
-            });
+            );
+
+
 
 
             map.current.setPitch(10);
@@ -279,7 +302,7 @@ function MovementMap() {
 
 
 
-            <div ref={mapContainer} id="map" style={{ height: 400, width: '100%', minHeight: 300 }} >
+            <div ref={mapContainer} id="map" style={{ height: 400, width: '100%', minHeight: 500 }} >
                 {(loading || markers.length < 1) && <div style={{ display: 'flex', flexDirection: 'column', position: 'absolute', zIndex: 100, justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
                     {loading ? <Spinner size={SpinnerSize.LARGE} /> : <H4>NO VALID DATA</H4>}
                 </div>
