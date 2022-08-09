@@ -156,7 +156,7 @@ function MovementMap() {
                 'source': 'svPaths',
                 'visibility': 'none',
                 'paint': {
-                    'line-color': '#6e0848',
+                    'line-color': '#C905EF',
                     'line-opacity': 0.3,
                     'line-width': 0.1
                 }
@@ -167,8 +167,8 @@ function MovementMap() {
                 type: 'circle',
                 source: 'svPoints',
                 paint: {
-                    'circle-radius': 2,
-                    'circle-color': '#223b53',
+                    'circle-radius': 1.7,
+                    'circle-color': '#000000',
                     'circle-stroke-width': 0,
                     'circle-opacity': 1
                 }
@@ -191,18 +191,18 @@ function MovementMap() {
                         'source': 'osPoints',
                         'layout': {
                             'icon-image': 'custom-marker',
-                            'icon-size': 0.2,
+                            'icon-size': 0.6,
                             // get the title name from the source's "title" property
                             'text-field': ['get', 'description'],
                             'text-variable-anchor': ['top', 'bottom', 'left', 'right'],
-                            'text-radial-offset': 1,
+                            'text-radial-offset': 1.3,
                             'text-justify': 'auto',
                             'text-offset': [0, 5],
                             'text-anchor': 'top',
 
                         },
                         paint: {
-                            "text-color": "#ffffff"
+                            "text-color": "#000000"
                         }
                     });
                 }
@@ -212,7 +212,7 @@ function MovementMap() {
 
 
             map.current.setPitch(10);
-            hidePaths(true)
+            hidePaths(false)
             // on a regular basis, add more coordinates from the saved list and update the map
 
             var dpi = 300;

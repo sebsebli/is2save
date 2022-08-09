@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { NumericInput, H2, H3, H4, Tree, Classes, Pre, EditableText, Divider, Button } from "@blueprintjs/core";
+import { NumericInput, H2, H3, H4, Tree, Classes, Pre, EditableText, Divider, Button, Collapse } from "@blueprintjs/core";
 import { DateRange, DateRangeInput, DateFormatProps, TimePrecision } from "@blueprintjs/datetime";
 import { Alignment, Navbar, NavbarGroup, NavbarHeading, Tab, Tabs, FormGroup, InputGroup, Card, Elevation, Callout, TextArea, Intent, Radio, RadioGroup, Position } from "@blueprintjs/core"; import { HotkeysProvider } from "@blueprintjs/core";
 import { Classes as Popover2Classes, ContextMenu2, Tooltip2 } from "@blueprintjs/popover2";
@@ -14,6 +14,7 @@ import { toast } from 'react-toastify';
 function PopulationForm(props) {
     const [scenario, setScenario, updateScenario] = useGlobalState("scenario");
     const [popID, setPopID] = useState(0)
+    const [isOpen, setIsOpen] = React.useState(false)
 
 
 
@@ -65,214 +66,217 @@ function PopulationForm(props) {
                                 }}
                             />
                         </FormGroup>
+                        <Button rightIcon={isOpen ? "caret-up" : "caret-down"} onClick={() => setIsOpen(!isOpen)}>advanced</Button>
 
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                            <DistributionEl id={popID}
-                                fitness={true}
-                                helperText="ADMIN: e.g. documenting, situation monitoring, counting people, EASY:  e.g. carrying things, providing food and water, MEDIUM: e.g. filling sandbags, HEAVY: e.g. carrying sandbags"
-                                label="Fitness in % (e.g. 20)"
-                                labelInfo="(required)"
-                                distributionType="fitnessDistribution"
-                                content={
-                                    [
-                                        {
-                                            id: "admin",
+                        <Collapse isOpen={isOpen}>
 
-                                            placeholder: 'admin tasks',
-                                        },
-                                        {
-                                            id: "easy",
+                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                                <DistributionEl id={popID}
+                                    fitness={true}
+                                    helperText="ADMIN: e.g. documenting, situation monitoring, counting people, EASY:  e.g. carrying things, providing food and water, MEDIUM: e.g. filling sandbags, HEAVY: e.g. carrying sandbags"
+                                    label="Fitness in % (e.g. 20)"
+                                    labelInfo="(required)"
+                                    distributionType="fitnessDistribution"
+                                    content={
+                                        [
+                                            {
+                                                id: "admin",
 
-
-                                            placeholder: 'easy tasks',
-                                        }, {
-                                            id: "medium",
+                                                placeholder: 'admin tasks',
+                                            },
+                                            {
+                                                id: "easy",
 
 
-                                            placeholder: 'medium tasks',
-                                        }, {
-                                            id: "heavy",
+                                                placeholder: 'easy tasks',
+                                            }, {
+                                                id: "medium",
 
 
-                                            placeholder: 'heavy tasks',
-                                        }
-
-                                    ]
-                                }
-                            />
-                            <DistributionEl id={popID} helperText="Describes the number of friends each volunteer can have."
-                                label="Number of friends"
-                                labelInfo="(required)"
-                                distributionType="friendsDistribution"
-
-                                content={
-                                    [
-                                        {
-                                            id: "min",
-
-                                            placeholder: 'Minimum',
-                                        },
-                                        {
-                                            id: "mod",
+                                                placeholder: 'medium tasks',
+                                            }, {
+                                                id: "heavy",
 
 
-                                            placeholder: 'Modus',
-                                        }, {
-                                            id: "max",
+                                                placeholder: 'heavy tasks',
+                                            }
 
-
-                                            placeholder: 'Maximum',
-                                        }
-                                    ]
-                                }
-                            />
-
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-
-                            <DistributionEl id={popID} helperText="The number of hours per day that a spontaneous volunteer is helping at an operating site before resting at home."
-                                label="Hours of help per day"
-                                labelInfo="(required)"
-                                distributionType="helpTimeDistribution"
-
-                                content={
-                                    [
-                                        {
-                                            id: "min",
-
-                                            placeholder: 'Minimum',
-                                        },
-                                        {
-                                            id: "mod",
-
-
-                                            placeholder: 'Modus',
-                                        }, {
-                                            id: "max",
-
-
-                                            placeholder: 'Maximum',
-                                        }
-                                    ]
-                                }
-                            />
-
-
-                            <DistributionEl id={popID} helperText="The number of days that a spontaneous volunteer is willing to help if not aborted due to other reasons."
-                                label="Days of help in scenario"
-                                labelInfo="(required)"
-                                distributionType="helpDurationDistribution"
-
-                                content={
-                                    [
-                                        {
-                                            id: "min",
-
-                                            placeholder: 'Minimum',
-                                        },
-                                        {
-                                            id: "mod",
-
-
-                                            placeholder: 'Modus',
-                                        }, {
-                                            id: "max",
-
-
-                                            placeholder: 'Maximum',
-                                        }
-                                    ]
-                                }
-                            />
-                        </div>
-                        <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-
-
-                            <DistributionEl id={popID} helperText="The number of hours that a spontaneous volunteer is resting at home before he potentially starts new helping activities."
-                                label="Hours of resting"
-                                labelInfo="(required)"
-                                distributionType="restingDurationDistribution"
-
-                                content={
-                                    [
-                                        {
-                                            id: "min",
-
-                                            placeholder: 'Minimum',
-                                        },
-                                        {
-                                            id: "mod",
-
-
-                                            placeholder: 'Modus',
-                                        }, {
-                                            id: "max",
-
-
-                                            placeholder: 'Maximum',
-                                        }
-                                    ]
-                                }
-                            />
-
-
-                            <DistributionEl id={popID} helperText="The number of rejects a day after that a spontaneous volunteer is not willling to help anymore."
-                                label="Number of acceptable rejects per day"
-                                labelInfo="(required)"
-                                distributionType="acceptableRejectsDayDistribution"
-
-                                content={
-                                    [
-                                        {
-                                            id: "min",
-
-                                            placeholder: 'Minimum',
-                                        },
-                                        {
-                                            id: "mod",
-
-
-                                            placeholder: 'Modus',
-                                        }, {
-                                            id: "max",
-
-
-                                            placeholder: 'Maximum',
-                                        }
-                                    ]
-                                }
-                            />
-                        </div>
-
-                        <DistributionEl id={popID} helperText="The number of rejects in a scenario after that a spontaneous volunteer stops all helping activities."
-                            label="Maximum number of acceptable rejects in scenario"
-                            labelInfo="(required)"
-                            distributionType="acceptableRejectsGeneralDistribution"
-
-                            content={
-                                [
-                                    {
-                                        id: "min",
-
-                                        placeholder: 'Minimum',
-                                    },
-                                    {
-                                        id: "mod",
-
-
-                                        placeholder: 'Modus',
-                                    }, {
-                                        id: "max",
-
-
-                                        placeholder: 'Maximum',
+                                        ]
                                     }
-                                ]
-                            }
-                        />
+                                />
+                                <DistributionEl id={popID} helperText="Describes the number of friends each volunteer can have."
+                                    label="Number of friends"
+                                    labelInfo="(required)"
+                                    distributionType="friendsDistribution"
+
+                                    content={
+                                        [
+                                            {
+                                                id: "min",
+
+                                                placeholder: 'Minimum',
+                                            },
+                                            {
+                                                id: "mod",
 
 
+                                                placeholder: 'Modus',
+                                            }, {
+                                                id: "max",
 
+
+                                                placeholder: 'Maximum',
+                                            }
+                                        ]
+                                    }
+                                />
+
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+
+                                <DistributionEl id={popID} helperText="The number of hours per day that a spontaneous volunteer is helping at an operating site before resting at home."
+                                    label="Hours of help per day"
+                                    labelInfo="(required)"
+                                    distributionType="helpTimeDistribution"
+
+                                    content={
+                                        [
+                                            {
+                                                id: "min",
+
+                                                placeholder: 'Minimum',
+                                            },
+                                            {
+                                                id: "mod",
+
+
+                                                placeholder: 'Modus',
+                                            }, {
+                                                id: "max",
+
+
+                                                placeholder: 'Maximum',
+                                            }
+                                        ]
+                                    }
+                                />
+
+
+                                <DistributionEl id={popID} helperText="The number of days that a spontaneous volunteer is willing to help if not aborted due to other reasons."
+                                    label="Days of help in scenario"
+                                    labelInfo="(required)"
+                                    distributionType="helpDurationDistribution"
+
+                                    content={
+                                        [
+                                            {
+                                                id: "min",
+
+                                                placeholder: 'Minimum',
+                                            },
+                                            {
+                                                id: "mod",
+
+
+                                                placeholder: 'Modus',
+                                            }, {
+                                                id: "max",
+
+
+                                                placeholder: 'Maximum',
+                                            }
+                                        ]
+                                    }
+                                />
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+
+
+                                <DistributionEl id={popID} helperText="The number of hours that a spontaneous volunteer is resting at home before he potentially starts new helping activities."
+                                    label="Hours of resting"
+                                    labelInfo="(required)"
+                                    distributionType="restingDurationDistribution"
+
+                                    content={
+                                        [
+                                            {
+                                                id: "min",
+
+                                                placeholder: 'Minimum',
+                                            },
+                                            {
+                                                id: "mod",
+
+
+                                                placeholder: 'Modus',
+                                            }, {
+                                                id: "max",
+
+
+                                                placeholder: 'Maximum',
+                                            }
+                                        ]
+                                    }
+                                />
+
+
+                                <DistributionEl id={popID} helperText="The number of rejects a day after that a spontaneous volunteer is not willling to help anymore."
+                                    label="Number of acceptable rejects per day"
+                                    labelInfo="(required)"
+                                    distributionType="acceptableRejectsDayDistribution"
+
+                                    content={
+                                        [
+                                            {
+                                                id: "min",
+
+                                                placeholder: 'Minimum',
+                                            },
+                                            {
+                                                id: "mod",
+
+
+                                                placeholder: 'Modus',
+                                            }, {
+                                                id: "max",
+
+
+                                                placeholder: 'Maximum',
+                                            }
+                                        ]
+                                    }
+                                />
+                            </div>
+
+                            <DistributionEl id={popID} helperText="The number of rejects in a scenario after that a spontaneous volunteer stops all helping activities."
+                                label="Maximum number of acceptable rejects in scenario"
+                                labelInfo="(required)"
+                                distributionType="acceptableRejectsGeneralDistribution"
+
+                                content={
+                                    [
+                                        {
+                                            id: "min",
+
+                                            placeholder: 'Minimum',
+                                        },
+                                        {
+                                            id: "mod",
+
+
+                                            placeholder: 'Modus',
+                                        }, {
+                                            id: "max",
+
+
+                                            placeholder: 'Maximum',
+                                        }
+                                    ]
+                                }
+                            />
+
+
+                        </Collapse>
 
 
 
@@ -361,7 +365,7 @@ function PopulationForm(props) {
                 /> */}
                 </div>
             </div>
-        </Card>
+        </Card >
 
     )
 }

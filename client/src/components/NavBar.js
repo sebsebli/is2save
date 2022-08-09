@@ -33,8 +33,8 @@ function NavBar() {
                 <NavbarHeading>IS2SaVe</NavbarHeading>
                 <NavbarDivider />
                 <Button className={Classes.MINIMAL} icon="home" text="Home" onClick={() => { navigate('/') }} />
-                <Button className={Classes.MINIMAL} icon="application" text="Scenario Editor" onClick={() => { navigate('/editor') }} />
                 <Button className={Classes.MINIMAL} icon="cog" text="Simulation Settings" onClick={() => { navigate('/simulation') }} />
+                <Button className={Classes.MINIMAL} icon="application" text="Scenario Editor" onClick={() => { navigate('/editor') }} />
                 <Button className={Classes.MINIMAL} icon="dashboard" text="Dashboard" onClick={() => { navigate('/dashboard') }} />
                 <Button className={Classes.MINIMAL} icon="join-table" text="Comparison" onClick={() => { navigate('/compare') }} />
 

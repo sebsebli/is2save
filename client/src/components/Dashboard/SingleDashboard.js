@@ -283,7 +283,6 @@ function SingleDashboard({ data, latest, comparison }) {
 
                 {!comparison && <SingleCard collapseAll={true} fullSize={true} title="Volunteer Map" content={<MovementMap />} style={{ display: comparison && 'none' }} />}
 
-
                 <iframe
                     sandbox="allow-scripts allow-same-origin"
                     //ref={iframeData}
