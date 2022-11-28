@@ -1,6 +1,6 @@
 {
     "$id": "SVCSDL",
-    "title": "DSS2Save Scenario Editor",
+    "title": "IS2SAVE Scenario Editor",
     "description": "Edit the scenario that you want to simulate in DSS2SaVe",
     "type": "object",
     "required": [
